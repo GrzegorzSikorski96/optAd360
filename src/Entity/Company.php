@@ -19,29 +19,29 @@ class Company
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Site::class, mappedBy="company")
      */
-    private $sites;
+    private Collection $sites;
 
     public function __construct()
     {
         $this->sites = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

@@ -19,6 +19,8 @@ class StatisticsController extends AbstractController
 {
     /**
      * @Route("/", name="statistics_index", methods={"GET"})
+     * @param StatisticsRepository $statisticsRepository
+     * @return Response
      */
     public function index(StatisticsRepository $statisticsRepository): Response
     {
@@ -29,6 +31,8 @@ class StatisticsController extends AbstractController
 
     /**
      * @Route("/new", name="statistics_new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -52,6 +56,8 @@ class StatisticsController extends AbstractController
 
     /**
      * @Route("/{id}", name="statistics_show", methods={"GET"})
+     * @param Statistics $statistic
+     * @return Response
      */
     public function show(Statistics $statistic): Response
     {
@@ -62,6 +68,9 @@ class StatisticsController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="statistics_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Statistics $statistic
+     * @return Response
      */
     public function edit(Request $request, Statistics $statistic): Response
     {
@@ -82,6 +91,9 @@ class StatisticsController extends AbstractController
 
     /**
      * @Route("/{id}", name="statistics_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Statistics $statistic
+     * @return Response
      */
     public function delete(Request $request, Statistics $statistic): Response
     {

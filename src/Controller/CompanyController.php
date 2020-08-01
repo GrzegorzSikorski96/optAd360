@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Form\CompanyType;
-use App\Service\CompanyService;
+use App\Repository\CompanyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,20 +17,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CompanyController extends AbstractController
 {
-    protected CompanyService $companyService;
-
-    public function __construct(CompanyService $companyService)
-    {
-        $this->companyService = $companyService;
-    }
-
     /**
      * @Route("/", name="companies", methods={"GET"})
+     * @param CompanyRepository $companyRepository
+     * @return Response
      */
-    public function companies(): Response
+    public function companies(CompanyRepository $companyRepository): Response
     {
         return $this->render('company/index.html.twig', [
-            'companies' => $this->companyService->companies(),
+            'companies' => $companyRepository->findAll(),
         ]);
     }
 
@@ -39,7 +34,7 @@ class CompanyController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $company = new Company();
         $form = $this->createForm(CompanyType::class, $company);
@@ -60,7 +55,9 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="company_show", methods={"GET"})
+     * @Route("/{id}", name="company", methods={"GET"})
+     * @param Company $company
+     * @return Response
      */
     public function show(Company $company): Response
     {
@@ -71,6 +68,9 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="company_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Company $company
+     * @return Response
      */
     public function edit(Request $request, Company $company): Response
     {
@@ -91,6 +91,9 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("/{id}", name="company_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Company $company
+     * @return Response
      */
     public function delete(Request $request, Company $company): Response
     {

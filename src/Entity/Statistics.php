@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\StatisticsRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,62 +18,62 @@ class Statistics
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $date;
+    private DateTimeInterface $date;
 
     /**
      * @ORM\Column(type="decimal", precision=8, scale=2)
      */
-    private $revenue;
+    private string $revenue;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $impression;
+    private int $impression;
 
     /**
      * @ORM\Column(type="decimal", precision=8, scale=2)
      */
-    private $ecpm;
+    private string $ecpm;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $clicks;
+    private int $clicks;
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
      */
-    private $ctr;
+    private string $ctr;
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="statistics")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $site;
+    private Site $site;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getRevenue(): ?string
+    public function getRevenue(): string
     {
         return $this->revenue;
     }
@@ -84,7 +85,7 @@ class Statistics
         return $this;
     }
 
-    public function getImpression(): ?int
+    public function getImpression(): int
     {
         return $this->impression;
     }
@@ -96,7 +97,7 @@ class Statistics
         return $this;
     }
 
-    public function getEcpm(): ?string
+    public function getEcpm(): string
     {
         return $this->ecpm;
     }
@@ -108,7 +109,7 @@ class Statistics
         return $this;
     }
 
-    public function getClicks(): ?int
+    public function getClicks(): int
     {
         return $this->clicks;
     }
@@ -120,7 +121,7 @@ class Statistics
         return $this;
     }
 
-    public function getCtr(): ?string
+    public function getCtr(): string
     {
         return $this->ctr;
     }
@@ -132,12 +133,12 @@ class Statistics
         return $this;
     }
 
-    public function getSite(): ?Site
+    public function getSite(): Site
     {
         return $this->site;
     }
 
-    public function setSite(?Site $site): self
+    public function setSite(Site $site): self
     {
         $this->site = $site;
 

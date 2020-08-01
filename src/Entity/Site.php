@@ -19,33 +19,33 @@ class Site
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $url;
+    private string $url;
 
     /**
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $company;
+    private Company $company;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="site")
      */
-    private $tags;
+    private Collection $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity=Statistics::class, mappedBy="site")
+     * @ORM\OneToMany(targetEntity=Statistics::class, mappedBy="site", orphanRemoval=true)
      */
-    private $statistics;
+    private Collection $statistics;
 
     public function __construct()
     {
@@ -53,12 +53,12 @@ class Site
         $this->statistics = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -82,12 +82,12 @@ class Site
         return $this;
     }
 
-    public function getCompany(): ?Company
+    public function getCompany(): Company
     {
         return $this->company;
     }
 
-    public function setCompany(?Company $company): self
+    public function setCompany(Company $company): self
     {
         $this->company = $company;
 
@@ -151,5 +151,10 @@ class Site
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
