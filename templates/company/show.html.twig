@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1>{{ company.name }}</h1>
+        <div id="fetch_statistics" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+             data-company-id="{{ company.id }}"><i
+                    class="fas fa-arrow-alt-circle-down fa-sm text-white-50"></i> Fetch Statistics
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ company.id }}</td>
+            <td>{{ company.name }}</td>
+            <td>
+                <div class="row">
+                    <a href="{{ path('company_edit', {'id': company.id}) }}" class="btn btn-sm text-info">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    {{ include('company/_delete_form.html.twig') }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Sites</h1>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-1">Id</th>
+            <th class="col-md-2">Name</th>
+            <th class="col-md-4">Tags</th>
+            <th class="col-md-4">Url</th>
+            <th class="col-md-1">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for site in company.sites %}
+            <tr>
+                <td>{{ site.id }}</td>
+                <td>{{ site.name }}</td>
+                <td>
+                    {% for tag in site.tags %}
+                        <span class="badge badge-primary">{{ tag.name }}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ site.url }}
+                </td>
+                <td>
+                    <div class="row">
+                        <a href="{{ path('site_edit', {'id': site.id}) }}" class="btn btn-sm text-info">
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        {{ include('site/_delete_form.html.twig') }}
+
+                        <a href="{{ path('site_show', {'id': site.id}) }}" class="btn btn-sm text-success">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $("#fetch_statistics").click(function () {
+            link = "/statistics/company/" + $('#fetch_statistics').data('companyId') + "/fetch";
+            $.ajax({
+                type: "POST",
+                url: link,
+            }).done(function () {
+                location.reload();
+                alert("Data fetched")
+            });
+        });
+
+    </script>
+{% endblock %}

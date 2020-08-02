@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1>Companies</h1>
+        <a href="{{ path('create_company') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-plus fa-sm text-white-50"></i> Add Company</a>
+    </div>
+
+    <div class="row">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">Id</th>
+                <th class="col-md-9">Name</th>
+                <th class="col-md-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td>{{ company.id }}</td>
+                    <td>{{ company.name }}</td>
+                    <td>
+                        <a href="{{ path('company_edit', {'id': company.id}) }}" class="text-info">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{{ path('company', {'id': company.id}) }}" class="text-success">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
