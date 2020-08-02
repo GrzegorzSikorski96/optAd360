@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Statistics;
-use App\Form\StatisticsType;
-use App\Repository\StatisticsRepository;
+use App\Entity\Company;
+use App\Service\StatisticsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,91 +16,30 @@ use Symfony\Component\Routing\Annotation\Route;
 class StatisticsController extends AbstractController
 {
     /**
-     * @Route("/", name="statistics_index", methods={"GET"})
-     * @param StatisticsRepository $statisticsRepository
-     * @return Response
+     * @var StatisticsService
      */
-    public function index(StatisticsRepository $statisticsRepository): Response
+    protected StatisticsService $statisticsService;
+
+    /**
+     * StatisticsController constructor.
+     * @param StatisticsService $statisticsService
+     */
+    public function __construct(StatisticsService $statisticsService)
     {
-        return $this->render('statistics/index.html.twig', [
-            'statistics' => $statisticsRepository->findAll(),
-        ]);
+        $this->statisticsService = $statisticsService;
     }
 
     /**
-     * @Route("/new", name="statistics_new", methods={"GET","POST"})
-     * @param Request $request
+     * @Route("/company/{id}/fetch", name="fetch_company_statistics", methods={"POST"})
+     * @param Company $company
      * @return Response
      */
-    public function new(Request $request): Response
+    public function fetchCompanyStatistics(Company $company): Response
     {
-        $statistic = new Statistics();
-        $form = $this->createForm(StatisticsType::class, $statistic);
-        $form->handleRequest($request);
+        $this->statisticsService->fetchCompanyStatistics($company);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($statistic);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('statistics_index');
-        }
-
-        return $this->render('statistics/new.html.twig', [
-            'statistic' => $statistic,
-            'form' => $form->createView(),
+        return $this->render('company/show.html.twig', [
+            'company' => $company,
         ]);
-    }
-
-    /**
-     * @Route("/{id}", name="statistics_show", methods={"GET"})
-     * @param Statistics $statistic
-     * @return Response
-     */
-    public function show(Statistics $statistic): Response
-    {
-        return $this->render('statistics/show.html.twig', [
-            'statistic' => $statistic,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="statistics_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param Statistics $statistic
-     * @return Response
-     */
-    public function edit(Request $request, Statistics $statistic): Response
-    {
-        $form = $this->createForm(StatisticsType::class, $statistic);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('statistics_index');
-        }
-
-        return $this->render('statistics/edit.html.twig', [
-            'statistic' => $statistic,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="statistics_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Statistics $statistic
-     * @return Response
-     */
-    public function delete(Request $request, Statistics $statistic): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $statistic->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($statistic);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('statistics_index');
     }
 }

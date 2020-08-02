@@ -27,25 +27,38 @@ class Tag
     private string $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Site::class, inversedBy="tags")
+     * @ORM\ManyToMany(targetEntity=Site::class, inversedBy="tags", cascade={"persist"})
      */
     private Collection $site;
 
+    /**
+     * Tag constructor.
+     */
     public function __construct()
     {
         $this->site = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -61,6 +74,10 @@ class Tag
         return $this->site;
     }
 
+    /**
+     * @param Site $site
+     * @return $this
+     */
     public function addSite(Site $site): self
     {
         if (!$this->site->contains($site)) {
@@ -70,6 +87,10 @@ class Tag
         return $this;
     }
 
+    /**
+     * @param Site $site
+     * @return $this
+     */
     public function removeSite(Site $site): self
     {
         if ($this->site->contains($site)) {
@@ -79,6 +100,9 @@ class Tag
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->name;

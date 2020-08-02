@@ -9,20 +9,31 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class StatisticsType
+ * @package App\Form
+ */
 class StatisticsType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('date')
-            ->add('revenue')
-            ->add('impression')
-            ->add('ecpm')
+            ->add('estimated_revenue')
+            ->add('ad_impression')
+            ->add('ad_ecpm')
             ->add('clicks')
-            ->add('ctr')
+            ->add('ad_ctr')
             ->add('site');
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

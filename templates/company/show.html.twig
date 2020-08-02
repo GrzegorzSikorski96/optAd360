@@ -3,6 +3,10 @@
 {% block body %}
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1>{{ company.name }}</h1>
+        <div id="fetch_statistics" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+             data-company-id="{{ company.id }}"><i
+                    class="fas fa-arrow-alt-circle-down fa-sm text-white-50"></i> Fetch Statistics
+        </div>
     </div>
 
     <table class="table">
@@ -31,8 +35,6 @@
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Sites</h1>
-        <a href="{{ path('site_new') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-plus fa-sm text-white-50"></i> Add Site</a>
     </div>
 
     <table class="table table-hover">
@@ -76,4 +78,20 @@
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $("#fetch_statistics").click(function () {
+            link = "/statistics/company/" + $('#fetch_statistics').data('companyId') + "/fetch";
+            $.ajax({
+                type: "POST",
+                url: link,
+            }).done(function () {
+                location.reload();
+                alert("Data fetched")
+            });
+        });
+
+    </script>
 {% endblock %}

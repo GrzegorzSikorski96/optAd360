@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\StatisticsRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,17 +29,17 @@ class Statistics
     /**
      * @ORM\Column(type="decimal", precision=8, scale=2)
      */
-    private string $revenue;
+    private string $estimated_revenue;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private int $impression;
+    private int $ad_impressions;
 
     /**
      * @ORM\Column(type="decimal", precision=8, scale=2)
      */
-    private string $ecpm;
+    private string $ad_ecpm;
 
     /**
      * @ORM\Column(type="integer")
@@ -48,7 +49,7 @@ class Statistics
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
      */
-    private string $ctr;
+    private string $ad_ctr;
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="statistics")
@@ -56,64 +57,102 @@ class Statistics
      */
     private Site $site;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return DateTimeInterface
+     */
     public function getDate(): DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(DateTimeInterface $date): self
+    /**
+     * @param DateTime $date
+     * @return $this
+     */
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getRevenue(): string
     {
-        return $this->revenue;
+        return $this->estimated_revenue;
     }
 
+    /**
+     * @param string $revenue
+     * @return $this
+     */
     public function setRevenue(string $revenue): self
     {
-        $this->revenue = $revenue;
+        $this->estimated_revenue = $revenue;
 
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getImpression(): int
     {
-        return $this->impression;
+        return $this->ad_impressions;
     }
 
+    /**
+     * @param int $impression
+     * @return $this
+     */
     public function setImpression(int $impression): self
     {
-        $this->impression = $impression;
+        $this->ad_impressions = $impression;
 
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getEcpm(): string
     {
-        return $this->ecpm;
+        return $this->ad_ecpm;
     }
 
+    /**
+     * @param string $ecpm
+     * @return $this
+     */
     public function setEcpm(string $ecpm): self
     {
-        $this->ecpm = $ecpm;
+        $this->ad_ecpm = $ecpm;
 
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getClicks(): int
     {
         return $this->clicks;
     }
 
+    /**
+     * @param int $clicks
+     * @return $this
+     */
     public function setClicks(int $clicks): self
     {
         $this->clicks = $clicks;
@@ -121,23 +160,37 @@ class Statistics
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getCtr(): string
     {
-        return $this->ctr;
+        return $this->ad_ctr;
     }
 
+    /**
+     * @param string $ctr
+     * @return $this
+     */
     public function setCtr(string $ctr): self
     {
-        $this->ctr = $ctr;
+        $this->ad_ctr = $ctr;
 
         return $this;
     }
 
+    /**
+     * @return Site
+     */
     public function getSite(): Site
     {
         return $this->site;
     }
 
+    /**
+     * @param Site $site
+     * @return $this
+     */
     public function setSite(Site $site): self
     {
         $this->site = $site;

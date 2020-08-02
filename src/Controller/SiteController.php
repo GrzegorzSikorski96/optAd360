@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\Site;
 use App\Form\SiteType;
-use App\Repository\SiteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,43 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class SiteController extends AbstractController
 {
     /**
-     * @Route("/", name="site_index", methods={"GET"})
-     * @param SiteRepository $siteRepository
-     * @return Response
-     */
-    public function index(SiteRepository $siteRepository): Response
-    {
-        return $this->render('site/index.html.twig', [
-            'sites' => $siteRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="site_new", methods={"GET","POST"})
-     * @param Request $request
-     * @return Response
-     */
-    public function new(Request $request): Response
-    {
-        $site = new Site();
-        $form = $this->createForm(SiteType::class, $site);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($site);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('site_index');
-        }
-
-        return $this->render('site/new.html.twig', [
-            'site' => $site,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="site_show", methods={"GET"})
      * @param Site $site
      * @return Response
@@ -62,6 +24,7 @@ class SiteController extends AbstractController
     public function show(Site $site): Response
     {
         return $this->render('site/show.html.twig', [
+            'daily' => $site->getStatistics()->last(),
             'site' => $site,
         ]);
     }
@@ -80,7 +43,7 @@ class SiteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('site_index');
+            return $this->redirectToRoute('site_show');
         }
 
         return $this->render('site/edit.html.twig', [
@@ -103,6 +66,6 @@ class SiteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('site_index');
+        return $this->redirectToRoute('company');
     }
 }

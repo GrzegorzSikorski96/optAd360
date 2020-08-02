@@ -27,25 +27,43 @@ class Company
     private string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Site::class, mappedBy="company")
+     * @ORM\OneToMany(targetEntity=Site::class, mappedBy="company", orphanRemoval=true)
      */
     private Collection $sites;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $url;
+
+    /**
+     * Company constructor.
+     */
     public function __construct()
     {
         $this->sites = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -61,6 +79,10 @@ class Company
         return $this->sites;
     }
 
+    /**
+     * @param Site $site
+     * @return $this
+     */
     public function addSite(Site $site): self
     {
         if (!$this->sites->contains($site)) {
@@ -71,6 +93,10 @@ class Company
         return $this;
     }
 
+    /**
+     * @param Site $site
+     * @return $this
+     */
     public function removeSite(Site $site): self
     {
         if ($this->sites->contains($site)) {
@@ -84,8 +110,30 @@ class Company
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return $this
+     */
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

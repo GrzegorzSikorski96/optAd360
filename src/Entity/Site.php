@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\SiteRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,22 +48,35 @@ class Site
      */
     private Collection $statistics;
 
+    /**
+     * Site constructor.
+     */
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->statistics = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -70,11 +84,18 @@ class Site
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
+    /**
+     * @param string $url
+     * @return $this
+     */
     public function setUrl(string $url): self
     {
         $this->url = $url;
@@ -82,11 +103,18 @@ class Site
         return $this;
     }
 
+    /**
+     * @return Company
+     */
     public function getCompany(): Company
     {
         return $this->company;
     }
 
+    /**
+     * @param Company $company
+     * @return $this
+     */
     public function setCompany(Company $company): self
     {
         $this->company = $company;
@@ -102,6 +130,10 @@ class Site
         return $this->tags;
     }
 
+    /**
+     * @param Tag $tag
+     * @return $this
+     */
     public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
@@ -112,6 +144,10 @@ class Site
         return $this;
     }
 
+    /**
+     * @param Tag $tag
+     * @return $this
+     */
     public function removeTag(Tag $tag): self
     {
         if ($this->tags->contains($tag)) {
@@ -123,6 +159,19 @@ class Site
     }
 
     /**
+     * @param string $date
+     * @return Statistics
+     */
+    public function getDateStatistics(string $date): ?Statistics
+    {
+        return $this->getStatistics()
+            ->filter(function (Statistics $statistics) use ($date) {
+                return $statistics->getDate() == new DateTime($date);
+            })
+            ->first() ?: null;
+    }
+
+    /**
      * @return Collection|Statistics[]
      */
     public function getStatistics(): Collection
@@ -130,6 +179,10 @@ class Site
         return $this->statistics;
     }
 
+    /**
+     * @param Statistics $statistic
+     * @return $this
+     */
     public function addStatistic(Statistics $statistic): self
     {
         if (!$this->statistics->contains($statistic)) {
@@ -140,6 +193,10 @@ class Site
         return $this;
     }
 
+    /**
+     * @param Statistics $statistic
+     * @return $this
+     */
     public function removeStatistic(Statistics $statistic): self
     {
         if ($this->statistics->contains($statistic)) {
@@ -153,6 +210,9 @@ class Site
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->name;
